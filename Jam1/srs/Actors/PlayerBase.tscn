@@ -1,0 +1,183 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://srs/Actors/PlayerKinematicBody2D.gd" type="Script" id=1]
+[ext_resource path="res://Assets/blobguy_sprite.png" type="Texture" id=2]
+[ext_resource path="res://Assets/icon.png" type="Texture" id=3]
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 1
+emission_sphere_radius = 42.46
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 98, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 30.0
+scale_random = 0.95
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 275, 0, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 550, 0, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 259, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 275, 259, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 550, 259, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 825, 259, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1100, 259, 275, 259 )
+
+[sub_resource type="SpriteFrames" id=11]
+animations = [ {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "walk",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
+"loop": true,
+"name": "dash",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=12]
+radius = 96.6785
+
+[sub_resource type="RectangleShape2D" id=13]
+extents = Vector2( 18.4446, 73.9124 )
+
+[sub_resource type="Shader" id=14]
+code = "shader_type particles;
+
+
+float rand_from_seed(inout uint seed) {
+	int k;
+	int s = int(seed);
+	if (s == 0)
+	s = 305420679;
+	k = s / 127773;
+	s = 16807 * (s - k * 127773) - 2836 * k;
+	if (s < 0)
+		s += 2147483647;
+	seed = uint(s);
+	return float(seed % uint(65536)) / 65535.0;
+}
+
+
+void vertex() {
+	
+	uint seed = NUMBER + RANDOM_SEED;
+	if (RESTART) {
+		vec3 direction = vec3(rand_from_seed(seed) - 0.5, rand_from_seed(seed) - 0.5, 0);
+		float speed = rand_from_seed(seed) * 500.0;
+		VELOCITY = direction * speed;
+	}
+	else {
+		VELOCITY.y += 2.0;
+	}
+	if (TRANSFORM[3].x > 200.0)
+	{
+		VELOCITY = vec3(0);
+	}
+	
+	COLOR.a = max(COLOR.a - DELTA, 0.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = SubResource( 14 )
+
+[node name="PlayerBase" type="Node2D"]
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+collision_layer = 17
+collision_mask = 17
+script = ExtResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="KinematicBody2D"]
+scale = Vector2( 2.03765, 1.9261 )
+current = true
+zoom = Vector2( 2, 2 )
+smoothing_enabled = true
+
+[node name="Particles2D" type="Particles2D" parent="KinematicBody2D"]
+position = Vector2( -107.145, -15.5107 )
+rotation = 1.57283
+emitting = false
+amount = 12
+lifetime = 1.3
+process_material = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="KinematicBody2D"]
+position = Vector2( 10.9315, 2.52258 )
+frames = SubResource( 11 )
+animation = "idle"
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+position = Vector2( -20.1815, -11.7725 )
+shape = SubResource( 12 )
+
+[node name="CombatArea" type="Area2D" parent="KinematicBody2D"]
+
+[node name="CombatCollision" type="CollisionShape2D" parent="KinematicBody2D/CombatArea"]
+position = Vector2( 60.5444, -8.40892 )
+shape = SubResource( 13 )
+disabled = true
+
+[node name="Blurbs" type="Node2D" parent="KinematicBody2D"]
+
+[node name="BlurbAttached1" type="Particles2D" parent="KinematicBody2D/Blurbs"]
+position = Vector2( -36.9993, -120.248 )
+emitting = false
+process_material = SubResource( 15 )
+texture = ExtResource( 3 )
+
+[node name="BlurbAttached2" type="Particles2D" parent="KinematicBody2D/Blurbs"]
+position = Vector2( 17.6588, 34.4767 )
+emitting = false
+process_material = SubResource( 15 )
+texture = ExtResource( 3 )
+
+[node name="BlurbAttached3" type="Particles2D" parent="KinematicBody2D/Blurbs"]
+position = Vector2( -111.839, 10.9316 )
+emitting = false
+process_material = SubResource( 15 )
+texture = ExtResource( 3 )
