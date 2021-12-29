@@ -8,16 +8,22 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Resource",
+"class": "SaveGame",
+"language": "GDScript",
+"path": "res://srs/Save/SaveGame.gd"
+} ]
 _global_script_class_icons={
-
+"SaveGame": ""
 }
 
 [application]
 
 config/name="IamEverywhere"
-run/main_scene="res://srs/World/Menu.tscn"
+run/main_scene="res://srs/UI/Menu.tscn"
 config/icon="res://Assets/icon.png"
+config/version="0.1"
 
 [input]
 

@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+
 export var speed = 200
 export var dash_multiplier = 100
 export var particle_amount = 20
@@ -9,9 +10,13 @@ var attacking = false
 var blurbs = []
 var game_over = false
 var dir
+var blurb_index = 0
+var loadPos
+
 
 func _ready():
 	blurbs = $Blurbs.get_children()
+
 
 func get_input():
 	# Add these actions in Project Settings -> Input Map.
@@ -66,23 +71,25 @@ func _physics_process(delta):
 		#Then make the shaders begin emmiting
 
 
-var blurb_index = 0
-
 func _on_Heart_body_entered(body):
-	var mult
-	var soft
-	print('glug')
 	blurbs[blurb_index].emitting = true
 	blurb_index += 1
-	mult = $Camera2D/CanvasLayer/ColorRect.material.get('shader_param/multiplier')
-#	tween.interpolate_property(get_material(), "shader_param/multiplier", mult, mult-0.1, 0.1, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-	$Camera2D/CanvasLayer/ColorRect.material.set('shader_param/multiplier', mult - 0.1)
-	soft = $Camera2D/CanvasLayer/ColorRect.material.get('shader_param/softness')
-#	tween.interpolate_property(get_material(), "shader_param/softness", soft, soft-0.1, 0.1, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-#	tween.start()
-	$Camera2D/CanvasLayer/ColorRect.material.set('shader_param/softness', soft - 0.1)
 	if blurb_index == blurbs.size():
 		print(blurb_index)
 		print('game over')
 		game_over = true
 		return game_over
+
+
+func _on_PlayerBase_loaded():
+	print('loaded')
+	var blurb_index = get_parent().blurb_index
+	print(blurb_index)
+	var loadPos = get_parent().loadPos
+	if blurb_index == null:
+		blurb_index = 0
+	#idk why these are not appearing
+	for blurb in range(blurb_index):
+		print(blurb)
+		blurbs[blurb].emitting = true
+	global_position = loadPos

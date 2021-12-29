@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://srs/UI/PauseBase.gd" type="Script" id=1]
+[ext_resource path="res://srs/Save/GameSaver.tscn" type="PackedScene" id=2]
+
+[node name="PauseBase" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+color = Color( 0, 0, 0, 0.627451 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="saveButton" type="Button" parent="MarginContainer/GridContainer"]
+margin_right = 74.0
+margin_bottom = 20.0
+text = "save"
+flat = true
+expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="loadButton" type="Button" parent="MarginContainer/GridContainer"]
+margin_top = 24.0
+margin_right = 74.0
+margin_bottom = 44.0
+text = "load"
+flat = true
+expand_icon = true
+
+[node name="quitButton" type="Button" parent="MarginContainer/GridContainer"]
+margin_top = 48.0
+margin_right = 74.0
+margin_bottom = 68.0
+text = "quit"
+flat = true
+expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/GridContainer"]
+margin_top = 72.0
+margin_right = 74.0
+margin_bottom = 96.0
+min_value = 1.0
+max_value = 1000.0
+value = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameSaver" parent="." instance=ExtResource( 2 )]
+[connection signal="pressed" from="MarginContainer/GridContainer/saveButton" to="." method="_on_saveButton_pressed"]
+[connection signal="pressed" from="MarginContainer/GridContainer/loadButton" to="." method="_on_loadButton_pressed"]
+[connection signal="pressed" from="MarginContainer/GridContainer/quitButton" to="." method="_on_quitButton_pressed"]

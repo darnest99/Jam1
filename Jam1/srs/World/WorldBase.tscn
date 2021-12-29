@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://srs/Actors/PlayerBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://srs/Actors/BlurbBase.tscn" type="PackedScene" id=2]
 [ext_resource path="res://srs/World/WorldBase.gd" type="Script" id=3]
+[ext_resource path="res://srs/Save/GameSaver.tscn" type="PackedScene" id=4]
 
 [node name="WorldBase" type="Node2D"]
 script = ExtResource( 3 )
@@ -37,4 +38,6 @@ position = Vector2( -879.316, 327.626 )
 
 [node name="pos4" type="Position2D" parent="SpawnPositions"]
 position = Vector2( -193.209, 35.5847 )
+
+[node name="GameSaver" parent="." instance=ExtResource( 4 )]
 [connection signal="timeout" from="MobTimer" to="." method="_on_MobTimer_timeout"]

@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://srs/UI/Settings.gd" type="Script" id=2]
+
+[node name="SettingsBase" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="FullscreenButton" type="Button" parent="MarginContainer/GridContainer"]
+margin_right = 78.0
+margin_bottom = 20.0
+toggle_mode = true
+text = "Fullscreen"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackButton" type="Button" parent="MarginContainer/GridContainer"]
+margin_top = 24.0
+margin_right = 78.0
+margin_bottom = 44.0
+text = "back"
+flat = true
+[connection signal="pressed" from="MarginContainer/GridContainer/FullscreenButton" to="." method="_on_FullscreenButton_pressed"]
+[connection signal="toggled" from="MarginContainer/GridContainer/FullscreenButton" to="." method="_on_FullscreenButton_toggled"]
+[connection signal="pressed" from="MarginContainer/GridContainer/BackButton" to="." method="_on_BackButton_pressed"]

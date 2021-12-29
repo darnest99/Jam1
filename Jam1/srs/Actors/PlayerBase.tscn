@@ -6,7 +6,7 @@
 [ext_resource path="res://srs/Actors/PlayerBase.gd" type="Script" id=4]
 [ext_resource path="res://Assets/headbuttparticle_sphere.png" type="Texture" id=5]
 [ext_resource path="res://srs/Actors/ColorRect.gd" type="Script" id=6]
-[ext_resource path="res://srs/World/PauseBase.tscn" type="PackedScene" id=7]
+[ext_resource path="res://srs/UI/PauseBase.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -154,7 +154,9 @@ shader = SubResource( 16 )
 radius = 94.1251
 height = 55.4366
 
-[node name="PlayerBase" type="Node2D"]
+[node name="PlayerBase" type="Node2D" groups=[
+"save",
+]]
 script = ExtResource( 4 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
@@ -244,6 +246,8 @@ texture = ExtResource( 3 )
 [node name="HeartCollision" type="CollisionShape2D" parent="KinematicBody2D/Heart"]
 position = Vector2( -39.522, -11.7725 )
 shape = SubResource( 18 )
-[connection signal="body_entered" from="KinematicBody2D/Heart" to="KinematicBody2D/Camera2D/CanvasLayer/ColorRect" method="_on_Heart_body_entered"]
+[connection signal="loaded" from="." to="KinematicBody2D/Camera2D/CanvasLayer/ColorRect" method="_on_PlayerBase_loaded"]
+[connection signal="loaded" from="." to="KinematicBody2D" method="_on_PlayerBase_loaded"]
 [connection signal="body_entered" from="KinematicBody2D/Heart" to="." method="_on_Heart_body_entered"]
+[connection signal="body_entered" from="KinematicBody2D/Heart" to="KinematicBody2D/Camera2D/CanvasLayer/ColorRect" method="_on_Heart_body_entered"]
 [connection signal="body_entered" from="KinematicBody2D/Heart" to="KinematicBody2D" method="_on_Heart_body_entered"]
