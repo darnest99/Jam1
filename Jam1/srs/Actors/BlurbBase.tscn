@@ -22,11 +22,10 @@ float rand_from_seed(inout uint seed) {
 
 
 void vertex() {
-	
 	uint seed = NUMBER + RANDOM_SEED;
 	if (RESTART) {
 		vec3 direction = vec3(rand_from_seed(seed) - 0.5, rand_from_seed(seed) - 0.5, 0);
-		float speed = rand_from_seed(seed) * 300.0;
+		float speed = rand_from_seed(seed) * 120.0;
 		VELOCITY = direction * speed;
 	}
 	else {
@@ -59,14 +58,17 @@ script = ExtResource( 2 )
 
 [node name="Particles2D" type="Particles2D" parent="Blurb"]
 position = Vector2( 2.5199, -6.79962 )
-amount = 800
+amount = 400
+randomness = 1.0
 process_material = SubResource( 2 )
 texture = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Blurb"]
+visible = false
 shape = SubResource( 3 )
 
 [node name="Heart" type="Area2D" parent="Blurb"]
+visible = false
 collision_layer = 16
 collision_mask = 16
 

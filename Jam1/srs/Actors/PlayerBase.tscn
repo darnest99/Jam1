@@ -1,92 +1,116 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://srs/Actors/PlayerKinematicBody2D.gd" type="Script" id=1]
 [ext_resource path="res://Assets/blobguy_sprite.png" type="Texture" id=2]
 [ext_resource path="res://Assets/enemyparticle_sphere.png" type="Texture" id=3]
 [ext_resource path="res://srs/Actors/PlayerBase.gd" type="Script" id=4]
+[ext_resource path="res://Assets/headbuttparticle_sphere.png" type="Texture" id=5]
+[ext_resource path="res://srs/Actors/ColorRect.gd" type="Script" id=6]
+[ext_resource path="res://srs/World/PauseBase.tscn" type="PackedScene" id=7]
 
-[sub_resource type="ParticlesMaterial" id=1]
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 color : hint_color;
+uniform float multiplier = 0.4;
+uniform float softness = 0.8;
+
+void fragment() {
+	float value = distance(UV, vec2(0.5));
+	COLOR = vec4(color.rgb, smoothstep(multiplier, softness, value));
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/color = null
+shader_param/multiplier = 0.4
+shader_param/softness = 0.8
+
+[sub_resource type="ParticlesMaterial" id=3]
+lifetime_randomness = 1.0
 emission_shape = 1
-emission_sphere_radius = 42.46
+emission_sphere_radius = 55.0
 flag_disable_z = true
-spread = 180.0
-gravity = Vector3( 0, 98, 0 )
+direction = Vector3( 1, 1, 0 )
+spread = 90.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 1.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-scale = 30.0
-scale_random = 0.95
-
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 275, 259 )
-
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 259, 275, 259 )
+scale = 2.0
+scale_random = 1.0
 
 [sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 275, 259, 275, 259 )
+region = Rect2( 0, 0, 275, 259 )
 
 [sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 550, 259, 275, 259 )
+region = Rect2( 0, 0, 275, 259 )
 
 [sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 825, 259, 275, 259 )
+region = Rect2( 275, 0, 275, 259 )
 
 [sub_resource type="AtlasTexture" id=7]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 1100, 259, 275, 259 )
+region = Rect2( 550, 0, 275, 259 )
 
 [sub_resource type="AtlasTexture" id=8]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 275, 259 )
+region = Rect2( 0, 259, 275, 259 )
 
 [sub_resource type="AtlasTexture" id=9]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 275, 0, 275, 259 )
+region = Rect2( 275, 259, 275, 259 )
 
 [sub_resource type="AtlasTexture" id=10]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 550, 0, 275, 259 )
+region = Rect2( 550, 259, 275, 259 )
 
-[sub_resource type="SpriteFrames" id=11]
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 825, 259, 275, 259 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 1100, 259, 275, 259 )
+
+[sub_resource type="SpriteFrames" id=13]
 animations = [ {
-"frames": [ SubResource( 2 ) ],
+"frames": [ SubResource( 4 ) ],
 "loop": true,
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
-"loop": true,
-"name": "dash",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
 "loop": true,
 "name": "walk",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "dash",
+"speed": 5.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=17]
+[sub_resource type="CapsuleShape2D" id=14]
 radius = 52.9213
 height = 80.6633
 
-[sub_resource type="RectangleShape2D" id=13]
+[sub_resource type="RectangleShape2D" id=15]
 extents = Vector2( 18.4446, 73.9124 )
 
-[sub_resource type="Shader" id=14]
+[sub_resource type="Shader" id=16]
 code = "shader_type particles;
 
 
@@ -123,10 +147,10 @@ void vertex() {
 	COLOR.a = max(COLOR.a - DELTA, 0.0);
 }"
 
-[sub_resource type="ShaderMaterial" id=15]
-shader = SubResource( 14 )
+[sub_resource type="ShaderMaterial" id=17]
+shader = SubResource( 16 )
 
-[sub_resource type="CapsuleShape2D" id=16]
+[sub_resource type="CapsuleShape2D" id=18]
 radius = 94.1251
 height = 55.4366
 
@@ -146,23 +170,42 @@ current = true
 zoom = Vector2( 2, 2 )
 smoothing_enabled = true
 
+[node name="CanvasLayer" type="CanvasLayer" parent="KinematicBody2D/Camera2D"]
+
+[node name="ColorRect" type="ColorRect" parent="KinematicBody2D/Camera2D/CanvasLayer"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="KinematicBody2D/Camera2D/CanvasLayer/ColorRect"]
+
+[node name="PauseBase" parent="KinematicBody2D/Camera2D/CanvasLayer" instance=ExtResource( 7 )]
+
 [node name="Particles2D" type="Particles2D" parent="KinematicBody2D"]
 position = Vector2( -107.145, -15.5107 )
-rotation = 1.57283
+rotation = 1.56933
 emitting = false
-amount = 12
-lifetime = 1.3
-process_material = SubResource( 1 )
+amount = 30
+lifetime = 0.5
+one_shot = true
+randomness = 0.75
+local_coords = false
+process_material = SubResource( 3 )
+texture = ExtResource( 5 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="KinematicBody2D"]
 position = Vector2( 10.9315, 2.52258 )
-frames = SubResource( 11 )
+frames = SubResource( 13 )
 animation = "idle"
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
 position = Vector2( 29.4313, -10.9316 )
-shape = SubResource( 17 )
+shape = SubResource( 14 )
 
 [node name="CombatArea" type="Area2D" parent="KinematicBody2D"]
 collision_layer = 16
@@ -170,7 +213,7 @@ collision_mask = 16
 
 [node name="CombatCollision" type="CollisionShape2D" parent="KinematicBody2D/CombatArea"]
 position = Vector2( 74.8396, -11.7725 )
-shape = SubResource( 13 )
+shape = SubResource( 15 )
 disabled = true
 
 [node name="Blurbs" type="Node2D" parent="KinematicBody2D"]
@@ -179,27 +222,28 @@ disabled = true
 position = Vector2( -32.7948, -88.294 )
 emitting = false
 amount = 200
-process_material = SubResource( 15 )
+process_material = SubResource( 17 )
 texture = ExtResource( 3 )
 
 [node name="BlurbAttached2" type="Particles2D" parent="KinematicBody2D/Blurbs"]
 position = Vector2( -71.476, -58.0218 )
 emitting = false
 amount = 200
-process_material = SubResource( 15 )
+process_material = SubResource( 17 )
 texture = ExtResource( 3 )
 
 [node name="BlurbAttached3" type="Particles2D" parent="KinematicBody2D/Blurbs"]
 position = Vector2( -26.0677, 31.113 )
 emitting = false
 amount = 200
-process_material = SubResource( 15 )
+process_material = SubResource( 17 )
 texture = ExtResource( 3 )
 
 [node name="Heart" type="Area2D" parent="KinematicBody2D"]
 
 [node name="HeartCollision" type="CollisionShape2D" parent="KinematicBody2D/Heart"]
 position = Vector2( -39.522, -11.7725 )
-shape = SubResource( 16 )
+shape = SubResource( 18 )
+[connection signal="body_entered" from="KinematicBody2D/Heart" to="KinematicBody2D/Camera2D/CanvasLayer/ColorRect" method="_on_Heart_body_entered"]
 [connection signal="body_entered" from="KinematicBody2D/Heart" to="." method="_on_Heart_body_entered"]
 [connection signal="body_entered" from="KinematicBody2D/Heart" to="KinematicBody2D" method="_on_Heart_body_entered"]
